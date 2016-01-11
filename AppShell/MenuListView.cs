@@ -21,10 +21,10 @@ namespace TommasoScalici.AppShell
 
         public MenuListView()
         {
+            BorderBrush = (Brush)Resources["SystemControlBackgroundAccentBrush"];
             ItemContainerStyle = (Style)AppShell.Current.Resources["MenuItemContainerStyle"];
             ItemTemplate = (DataTemplate)AppShell.Current.Resources["MenuItemTemplate"];
 
-            BorderBrush = (Brush)Resources["SystemControlBackgroundAccentBrush"];
             IsItemClickEnabled = true;
             SelectionMode = ListViewSelectionMode.Single;
 
@@ -139,7 +139,7 @@ namespace TommasoScalici.AppShell
             var item = (sender as MenuListView)?.ItemFromContainer(e) as MenuItem;
             Type destinationPageType = null;
 
-            item?.Action();
+            item?.RaiseClick();
 
             if (!string.IsNullOrEmpty(item.DestinationPage))
             {
@@ -151,7 +151,7 @@ namespace TommasoScalici.AppShell
                         break;
                 }
 
-                if (destinationPageType != null && destinationPageType != AppShell.Current.AppFrame.CurrentSourcePageType)
+                if (destinationPageType != null)
                     AppShell.Current.AppFrame.Navigate(destinationPageType, item.Arguments);
             }
         }

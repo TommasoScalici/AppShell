@@ -18,16 +18,16 @@
                 <Grid>
 
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition />
+                        <ColumnDefinition Width="Auto" />
                         <ColumnDefinition Width="Auto" />
                         <ColumnDefinition />
                     </Grid.ColumnDefinitions>
 
                     <ContentPresenter HorizontalAlignment="Center"
                                       VerticalAlignment="Center"
-                                      Content="{x:Bind UIContent}"
-                                      ToolTipService.ToolTip="{x:Bind Label}"
-                                      Visibility="{x:Bind UIContentVisibility}" />
+                                      Content="{Binding UIContent}"
+                                      ToolTipService.ToolTip="{Binding Label}"
+                                      Visibility="{Binding UIContentVisibility}" />
 
                     <FontIcon Grid.Column="1"
                               Width="48"
@@ -35,15 +35,15 @@
                               HorizontalAlignment="Center"
                               VerticalAlignment="Center"
                               FontSize="20"
-                              Glyph="{x:Bind SymbolAsChar}"
-                              ToolTipService.ToolTip="{x:Bind Label}"
-                              Visibility="{x:Bind SymbolVisibility}" />
+                              Glyph="{Binding SymbolAsChar}"
+                              ToolTipService.ToolTip="{Binding Label}"
+                              Visibility="{Binding SymbolVisibility}" />
 
                     <TextBlock Grid.Column="2"
                                HorizontalAlignment="Center"
                                VerticalAlignment="Center"
-                               Text="{x:Bind Label}"
-                               Visibility="{x:Bind LabelVisibility}" />
+                               Text="{Binding Label}"
+                               Visibility="{Binding LabelVisibility}" />
                 </Grid>
             </DataTemplate>
 
@@ -96,12 +96,14 @@
         </SplitView>
 
         <ToggleButton x:Name="togglePaneButton"
+                      Checked="TogglePaneButtonChecked"
                       Content="&#xE700;"
                       IsChecked="{Binding IsPaneOpen,
                                           ElementName=shellSplitView,
                                           Mode=TwoWay}"
                       Style="{ThemeResource SplitViewPaneToggleButtonStyle}"
-                      ToolTipService.ToolTip="Menu" />
+                      ToolTipService.ToolTip="Menu"
+                      Unchecked="TogglePaneButtonUnchecked" />
     </Grid>
 
 </UserControl>

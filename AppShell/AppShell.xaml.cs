@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 
+using Windows.ApplicationModel;
 using Windows.Foundation;
 using Windows.UI.Core;
 using Windows.UI.Xaml;
@@ -12,37 +13,41 @@ namespace TommasoScalici.AppShell
     public sealed partial class AppShell : UserControl
     {
         List<MenuItem> menuItems = new List<MenuItem>();
+        List<VisualStateGroup> visualStateGroups = new List<VisualStateGroup>();
 
 
         public AppShell()
         {
             InitializeComponent();
-            Current = this;
 
-            Loaded += (sender, args) =>
+            if (!DesignMode.DesignModeEnabled)
             {
-                togglePaneButton.Focus(FocusState.Programmatic);
-                OnPaneSizeChanged();
-            };
+                Current = this;
 
-            SystemNavigationManager.GetForCurrentView().BackRequested += (sender, e) =>
-            {
-                if (!e.Handled && AppFrame.CanGoBack)
+                Loaded += (sender, args) =>
                 {
-                    e.Handled = true;
-                    AppFrame.GoBack();
-                }
-            };
+                    togglePaneButton.Focus(FocusState.Programmatic);
+                    OnPaneSizeChanged();
+                };
+
+                SystemNavigationManager.GetForCurrentView().BackRequested += (sender, e) =>
+                {
+                    if (!e.Handled && AppFrame.CanGoBack)
+                    {
+                        e.Handled = true;
+                        AppFrame.GoBack();
+                    }
+                };
+            }
         }
 
 
+        public event TypedEventHandler<AppShell, bool> PaneStateChanged;
         public event TypedEventHandler<AppShell, Rect> TogglePaneButtonRectChanged;
 
 
         public static AppShell Current { get; private set; }
 
-        public IEnumerable<MenuItem> BottomMenuItems { get; private set; }
-        public IEnumerable<MenuItem> TopMenuItems { get; private set; }
         public Frame AppFrame { get { return frame; } }
         public Rect PaneToggleButtonRect { get; private set; }
         public SplitView ShellSplitView { get { return shellSplitView; } }
@@ -62,29 +67,69 @@ namespace TommasoScalici.AppShell
             Current.shellSplitView.Pane = value;
         }
 
-
-        IEnumerable<MenuListView> GetMenuListViews()
+        public void HideMenu()
         {
-            if (shellSplitView.Pane is MenuListView)
-                yield return shellSplitView.Pane as MenuListView;
-            else if (shellSplitView.Pane is Panel)
+            var groups = VisualStateManager.GetVisualStateGroups(rootGrid);
+
+            foreach (var group in groups)
+                visualStateGroups.Add(group);
+
+            groups.Clear();
+
+            ShellSplitView.DisplayMode = SplitViewDisplayMode.Overlay;
+            ShellSplitView.IsPaneOpen = false;
+            togglePaneButton.Visibility = Visibility.Collapsed;
+
+            if (ShellSplitView.Pane != null)
+                ShellSplitView.Pane.Visibility = Visibility.Collapsed;
+        }
+
+        public void ShowMenu()
+        {
+            var groups = VisualStateManager.GetVisualStateGroups(rootGrid);
+
+            foreach (var group in visualStateGroups)
+                groups.Add(group);
+
+            visualStateGroups.Clear();
+
+            togglePaneButton.Visibility = Visibility.Visible;
+
+            if (ShellSplitView.Pane != null)
+                ShellSplitView.Pane.Visibility = Visibility.Visible;
+        }
+
+        IEnumerable<MenuListView> GetMenuListViews(UIElement element)
+        {
+            if (element is MenuListView)
+                yield return element as MenuListView;
+
+            if (element is ContentControl)
             {
-                foreach (var child in (shellSplitView.Pane as Panel).Children)
-                {
-                    if (child is MenuListView)
-                        yield return child as MenuListView;
-                }
+                var content = (element as ContentControl)?.Content as UIElement;
+
+                if (content != null)
+                    foreach (var menuListView in GetMenuListViews(content))
+                        yield return menuListView;
+            }
+            if (element is Panel)
+            {
+                var children = (element as Panel)?.Children;
+
+                if (children != null)
+                    foreach (var child in children)
+                        foreach (var menuListView in GetMenuListViews(child))
+                            yield return menuListView;
             }
         }
 
         void OnPaneSizeChanged()
         {
-            if (shellSplitView.DisplayMode == SplitViewDisplayMode.Inline || shellSplitView.DisplayMode == SplitViewDisplayMode.Overlay)
+            if (shellSplitView.DisplayMode == SplitViewDisplayMode.Overlay)
             {
                 var transform = togglePaneButton.TransformToVisual(this);
                 var rect = transform.TransformBounds(new Rect(0, 0, togglePaneButton.ActualWidth, togglePaneButton.ActualHeight));
                 PaneToggleButtonRect = rect;
-
             }
             else
                 PaneToggleButtonRect = new Rect();
@@ -94,7 +139,10 @@ namespace TommasoScalici.AppShell
 
         void OnNavigatedToPage(object sender, NavigationEventArgs e)
         {
-            var menuItems = GetMenuListViews().Select(menuListView => menuListView.Items).Cast<MenuItem>();
+            var menuItems = from menuListView in GetMenuListViews(shellSplitView.Pane)
+                            from MenuItem menuItem in menuListView.Items
+                            select menuItem;
+
             var item = menuItems.SingleOrDefault(p => p.DestinationPage == e.SourcePageType.FullName);
             var snm = SystemNavigationManager.GetForCurrentView();
 
@@ -118,7 +166,7 @@ namespace TommasoScalici.AppShell
 
         void SetSelectedMenuItem(MenuItem item)
         {
-            var menuListViews = GetMenuListViews();
+            var menuListViews = GetMenuListViews(shellSplitView.Pane);
 
             foreach (var menuListView in menuListViews)
             {
@@ -128,6 +176,18 @@ namespace TommasoScalici.AppShell
                     menuListView.SetSelectedItem(container as ListViewItem);
                 }
             }
+        }
+
+        void TogglePaneButtonChecked(object sender, RoutedEventArgs e)
+        {
+            OnPaneSizeChanged();
+            PaneStateChanged?.Invoke(Current, shellSplitView.IsPaneOpen);
+        }
+
+        void TogglePaneButtonUnchecked(object sender, RoutedEventArgs e)
+        {
+            OnPaneSizeChanged();
+            PaneStateChanged?.Invoke(Current, shellSplitView.IsPaneOpen);
         }
     }
 }
