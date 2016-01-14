@@ -12,6 +12,7 @@ namespace TommasoScalici.AppShell
 {
     public sealed partial class AppShell : UserControl
     {
+        SplitViewDisplayMode previousSplitViewDisplayMode;
         List<MenuItem> menuItems = new List<MenuItem>();
         List<VisualStateGroup> visualStateGroups = new List<VisualStateGroup>();
 
@@ -76,6 +77,7 @@ namespace TommasoScalici.AppShell
 
             groups.Clear();
 
+            previousSplitViewDisplayMode = ShellSplitView.DisplayMode;
             ShellSplitView.DisplayMode = SplitViewDisplayMode.Overlay;
             ShellSplitView.IsPaneOpen = false;
             togglePaneButton.Visibility = Visibility.Collapsed;
@@ -96,7 +98,10 @@ namespace TommasoScalici.AppShell
             togglePaneButton.Visibility = Visibility.Visible;
 
             if (ShellSplitView.Pane != null)
+            {
+                ShellSplitView.DisplayMode = previousSplitViewDisplayMode;
                 ShellSplitView.Pane.Visibility = Visibility.Visible;
+            }
         }
 
         IEnumerable<MenuListView> GetMenuListViews(UIElement element)

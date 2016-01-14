@@ -15,7 +15,10 @@ namespace TommasoScalici.AppShell
         public static readonly DependencyProperty LabelProperty =
             DependencyProperty.Register("Label", typeof(string), typeof(MenuItem), new PropertyMetadata(string.Empty));
         public static readonly DependencyProperty SymbolProperty =
-            DependencyProperty.Register("Symbol", typeof(Symbol), typeof(MenuItem), new PropertyMetadata(DependencyProperty.UnsetValue));
+            DependencyProperty.Register("Symbol", typeof(Symbol), typeof(MenuItem), new PropertyMetadata(default(Symbol)));
+        public static readonly DependencyProperty SymbolAsGlyphProperty =
+            DependencyProperty.Register("SymbolAsGlyph", typeof(string), typeof(MenuItem),
+            new PropertyMetadata(DependencyProperty.UnsetValue));
         public static readonly DependencyProperty UIContentProperty =
             DependencyProperty.Register("UIContent", typeof(UIElement), typeof(MenuItem),
             new PropertyMetadata(DependencyProperty.UnsetValue));
@@ -58,6 +61,11 @@ namespace TommasoScalici.AppShell
             get { return (Symbol)GetValue(SymbolProperty); }
             set { SetValue(SymbolProperty, value); }
         }
+        public string SymbolAsGlyph
+        {
+            get { return (string)GetValue(SymbolAsGlyphProperty); }
+            set { SetValue(SymbolAsGlyphProperty, value); }
+        }
         public UIElement UIContent
         {
             get { return (UIElement)GetValue(UIContentProperty); }
@@ -79,7 +87,7 @@ namespace TommasoScalici.AppShell
             set { SetValue(UIContentVisibilityProperty, value); }
         }
 
-        public char SymbolAsChar { get { return (char)Symbol; } }
+        public char SymbolAsChar { get { return Symbol == default(Symbol) ? SymbolAsGlyph[0] : (char)Symbol; } }
 
 
         public void RaiseClick() => OnClick();
