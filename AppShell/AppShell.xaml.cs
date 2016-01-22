@@ -25,6 +25,8 @@ namespace TommasoScalici.AppShell
             {
                 Current = this;
 
+                LayoutUpdated += (sender, args) => OnPaneSizeChanged();
+
                 Loaded += (sender, args) =>
                 {
                     togglePaneButton.Focus(FocusState.Programmatic);
@@ -84,6 +86,8 @@ namespace TommasoScalici.AppShell
 
             if (ShellSplitView.Pane != null)
                 ShellSplitView.Pane.Visibility = Visibility.Collapsed;
+
+            OnPaneSizeChanged();
         }
 
         public void ShowMenu()
@@ -102,6 +106,8 @@ namespace TommasoScalici.AppShell
                 ShellSplitView.DisplayMode = previousSplitViewDisplayMode;
                 ShellSplitView.Pane.Visibility = Visibility.Visible;
             }
+
+            OnPaneSizeChanged();
         }
 
         IEnumerable<MenuListView> GetMenuListViews(UIElement element)

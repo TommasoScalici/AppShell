@@ -21,9 +21,12 @@ namespace TommasoScalici.AppShell
 
         public MenuListView()
         {
-            BorderBrush = (Brush)Resources["SystemControlBackgroundAccentBrush"];
-            ItemContainerStyle = (Style)AppShell.Current.Resources["MenuItemContainerStyle"];
-            ItemTemplate = (DataTemplate)AppShell.Current.Resources["MenuItemTemplate"];
+            if (!DesignMode.DesignModeEnabled)
+            {
+                BorderBrush = (Brush)Resources["SystemControlBackgroundAccentBrush"];
+                ItemContainerStyle = (Style)AppShell.Current.Resources["MenuItemContainerStyle"];
+                ItemTemplate = (DataTemplate)AppShell.Current.Resources["MenuItemTemplate"];
+            }
 
             IsItemClickEnabled = true;
             SelectionMode = ListViewSelectionMode.Single;
@@ -93,10 +96,13 @@ namespace TommasoScalici.AppShell
         {
             base.OnApplyTemplate();
 
-            for (int i = 0; i < ItemContainerTransitions.Count; i++)
+            if (!DesignMode.DesignModeEnabled)
             {
-                if (ItemContainerTransitions[i] is EntranceThemeTransition)
-                    ItemContainerTransitions.RemoveAt(i);
+                for (int i = 0; i < ItemContainerTransitions.Count; i++)
+                {
+                    if (ItemContainerTransitions[i] is EntranceThemeTransition)
+                        ItemContainerTransitions.RemoveAt(i);
+                }
             }
         }
 
