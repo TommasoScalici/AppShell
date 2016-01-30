@@ -17,8 +17,7 @@ namespace TommasoScalici.AppShell
         public static readonly DependencyProperty SymbolProperty =
             DependencyProperty.Register("Symbol", typeof(Symbol), typeof(MenuItem), new PropertyMetadata(default(Symbol)));
         public static readonly DependencyProperty SymbolAsGlyphProperty =
-            DependencyProperty.Register("SymbolAsGlyph", typeof(string), typeof(MenuItem),
-            new PropertyMetadata(DependencyProperty.UnsetValue));
+            DependencyProperty.Register("SymbolAsGlyph", typeof(string), typeof(MenuItem), new PropertyMetadata(string.Empty));
         public static readonly DependencyProperty UIContentProperty =
             DependencyProperty.Register("UIContent", typeof(UIElement), typeof(MenuItem),
             new PropertyMetadata(DependencyProperty.UnsetValue));
@@ -87,7 +86,14 @@ namespace TommasoScalici.AppShell
             set { SetValue(UIContentVisibilityProperty, value); }
         }
 
-        public char SymbolAsChar { get { return Symbol == default(Symbol) ? SymbolAsGlyph[0] : (char)Symbol; } }
+        public char SymbolAsChar
+        {
+            get
+            {
+                return Symbol == default(Symbol) ? string.IsNullOrEmpty(SymbolAsGlyph) ?
+                                 default(char) : SymbolAsGlyph[0] : (char)Symbol;
+            }
+        }
 
 
         public void RaiseClick() => OnClick();
