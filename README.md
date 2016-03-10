@@ -121,4 +121,4 @@ If you want to use also the PageHeader and PageFooter feature in your pages, the
 
 ## License
 
-MVVM Extensions is released under [MIT License](https://github.com/TommasoScalici/MVVMExtensions/blob/master/LICENSE.md).
+AppShell is released under [MIT License](https://github.com/TommasoScalici/AppShell/blob/master/LICENSE.md).
