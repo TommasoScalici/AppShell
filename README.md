@@ -11,8 +11,8 @@ Then, all you have to do is to insert the AppShell control in your MainPage.xaml
 
 Here is an example:
 
-![alt tag](http://i.imgur.com/v1dFxhj.png "AppShell sample 1")
-![alt tag](http://i.imgur.com/fzPtYx4.png "AppShell sample 2")
+![alt tag](http://i.imgur.com/OkxA7w7.png "AppShell sample 1")
+![alt tag](http://i.imgur.com/u2nTADP.png "AppShell sample 2")
 
 And here's the code you need to achieve that result:
 
@@ -85,12 +85,12 @@ Each MenuItem object has different properties and events that you can use to cus
 If you want to use also the PageHeader and PageFooter feature in your pages, the implementation is straightforward:
 
 ```xaml
-<Page x:Class="TestApp.TestPage"
+<Page x:Class="AppShell.TestApp.TestPage"
       xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
       xmlns:as="using:TommasoScalici.AppShell"
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-      xmlns:local="using:TestApp"
+      xmlns:local="using:AppShell.TestApp"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
       mc:Ignorable="d">
 
@@ -105,13 +105,21 @@ If you want to use also the PageHeader and PageFooter feature in your pages, the
         <as:PageHeader Grid.Row="0">
             <as:PageHeader.HeaderContent>
                 <TextBlock HorizontalAlignment="Center"
-                           VerticalAlignment="Center"
+                           Style="{ThemeResource SubheaderTextBlockStyle}"
                            Text="Header" />
             </as:PageHeader.HeaderContent>
         </as:PageHeader>
 
+        <TextBlock Grid.Row="1"
+                   HorizontalAlignment="Center"
+                   VerticalAlignment="Center"
+                   Style="{ThemeResource HeaderTextBlockStyle}"
+                   Text="Here goes your content" />
+
         <as:PageFooter Grid.Row="2">
-            <TextBlock Text="Footer" />
+            <TextBlock HorizontalAlignment="Center"
+                       Style="{ThemeResource SubheaderTextBlockStyle}"
+                       Text="Footer" />
         </as:PageFooter>
 
     </Grid>
