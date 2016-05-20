@@ -1,0 +1,49 @@
+﻿<Page x:Class="AppShell.TestApp.MainPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:as="using:TommasoScalici.AppShell"
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+      xmlns:local="using:AppShell.TestApp"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+      Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"
+      mc:Ignorable="d">
+
+    <as:AppShell>
+
+        <as:AppShell.Menu>
+
+            <Grid>
+
+                <Grid.RowDefinitions>
+                    <RowDefinition />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+
+                <as:MenuListView Margin="0,48,0,0">
+                    <as:MenuItem Label="Home" Symbol="Home" />
+                    <as:MenuItem Label="Profile" Symbol="ContactInfo" />
+                    <as:MenuItem Label="Info" SymbolAsGlyph="&#xE946;" />
+                </as:MenuListView>
+
+                <as:MenuListView Grid.Row="1">
+                    <as:MenuItem IsSelectable="False"
+                                 Label="Username"
+                                 SymbolVisibility="Collapsed">
+                        <as:MenuItem.UIContent>
+                            <Ellipse Width="38"
+                                     Height="38"
+                                     Margin="5,0,10,0">
+                                <Ellipse.Fill>
+                                    <ImageBrush ImageSource="Assets/UserImage.png" />
+                                </Ellipse.Fill>
+                            </Ellipse>
+                        </as:MenuItem.UIContent>
+                    </as:MenuItem>
+                    <as:MenuItem Label="Settings" Symbol="Setting" />
+                </as:MenuListView>
+
+            </Grid>
+        </as:AppShell.Menu>
+    </as:AppShell>
+
+</Page>

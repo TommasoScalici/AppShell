@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
+using System.Threading.Tasks;
 
 using Windows.ApplicationModel;
 using Windows.UI.Xaml;
@@ -32,44 +32,10 @@ namespace TommasoScalici.AppShell
             SelectionMode = ListViewSelectionMode.Single;
 
             ContainerContentChanging += MenuItemContainerContentChanging;
+            Loaded += MenuListviewLoaded;
             ItemClick += ItemClickedHandler;
             ItemInvoked += MenuItemInvoked;
             SelectionChanged += MenuListViewSelectionChanged;
-
-            Loaded += async (sender, args) =>
-            {
-                var folder = Package.Current.InstalledLocation;
-
-                foreach (var file in await folder.GetFilesAsync())
-                {
-                    if ((file.FileType != ".dll" && file.FileType != ".exe") ||
-                        file.DisplayName.StartsWith("Microsoft", StringComparison.Ordinal) ||
-                        file.DisplayName.StartsWith("System", StringComparison.Ordinal))
-                        continue;
-
-                    try
-                    {
-                        userAssemblies.Add(Assembly.Load(new AssemblyName(file.DisplayName)));
-                    }
-                    catch (Exception ex)
-                    {
-                        Debug.WriteLine(ex.Message);
-                    }
-                }
-
-                var parent = VisualTreeHelper.GetParent(this);
-
-                while (parent != null && !(parent is SplitView))
-                    parent = VisualTreeHelper.GetParent(parent);
-
-                if (parent != null)
-                {
-                    splitViewHost = parent as SplitView;
-                    splitViewHost.RegisterPropertyChangedCallback(SplitView.IsPaneOpenProperty, (s, a) => OnPaneToggled());
-
-                    OnPaneToggled();
-                }
-            };
         }
 
 
@@ -160,6 +126,38 @@ namespace TommasoScalici.AppShell
                 if (destinationPageType != null)
                     AppShell.Current.AppFrame.Navigate(destinationPageType, item.Arguments);
             }
+        }
+
+        void MenuListviewLoaded(object sender, RoutedEventArgs e)
+        {
+            Task.Run(async () =>
+            {
+                var folder = Package.Current.InstalledLocation;
+
+                foreach (var file in await folder.GetFilesAsync())
+                {
+                    if ((file.FileType != ".dll" && file.FileType != ".exe") ||
+                         file.DisplayName.StartsWith("Clr", StringComparison.Ordinal) ||
+                         file.DisplayName.StartsWith("Microsoft", StringComparison.Ordinal) ||
+                         file.DisplayName.StartsWith("System", StringComparison.Ordinal))
+                        continue;
+
+                    userAssemblies.Add(Assembly.Load(new AssemblyName(file.DisplayName)));
+                }
+
+                var parent = VisualTreeHelper.GetParent(this);
+
+                while (parent != null && !(parent is SplitView))
+                    parent = VisualTreeHelper.GetParent(parent);
+
+                if (parent != null)
+                {
+                    splitViewHost = parent as SplitView;
+                    splitViewHost.RegisterPropertyChangedCallback(SplitView.IsPaneOpenProperty, (s, a) => OnPaneToggled());
+
+                    OnPaneToggled();
+                }
+            });
         }
 
         void MenuListViewSelectionChanged(object sender, SelectionChangedEventArgs e)

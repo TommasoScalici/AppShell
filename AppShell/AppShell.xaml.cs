@@ -150,18 +150,18 @@ namespace TommasoScalici.AppShell
 
         void OnNavigatedToPage(object sender, NavigationEventArgs e)
         {
-            var menuItems = from menuListView in GetMenuListViews(shellSplitView.Pane)
+            var allMenuItems = from menuListView in GetMenuListViews(shellSplitView.Pane)
                             from MenuItem menuItem in menuListView.Items
                             select menuItem;
 
-            var item = menuItems.SingleOrDefault(p => p.DestinationPage == e.SourcePageType.FullName);
+            var item = allMenuItems.SingleOrDefault(p => p.DestinationPage == e.SourcePageType.FullName);
             var snm = SystemNavigationManager.GetForCurrentView();
 
             if (item == null && AppFrame.BackStackDepth > 0)
             {
                 foreach (var entry in AppFrame.BackStack.Reverse())
                 {
-                    item = menuItems.SingleOrDefault(p => p.DestinationPage == entry.SourcePageType.FullName);
+                    item = allMenuItems.SingleOrDefault(p => p.DestinationPage == entry.SourcePageType.FullName);
 
                     if (item != null)
                         break;
