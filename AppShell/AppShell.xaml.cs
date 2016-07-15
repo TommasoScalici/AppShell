@@ -151,17 +151,19 @@ namespace TommasoScalici.AppShell
         void OnNavigatedToPage(object sender, NavigationEventArgs e)
         {
             var allMenuItems = from menuListView in GetMenuListViews(shellSplitView.Pane)
-                            from MenuItem menuItem in menuListView.Items
-                            select menuItem;
+                               from MenuItem menuItem in menuListView.Items
+                               select menuItem;
 
-            var item = allMenuItems.SingleOrDefault(p => p.DestinationPage == e.SourcePageType.FullName);
+            var item = allMenuItems.SingleOrDefault(p => p.DestinationPage == e.SourcePageType.FullName &&
+                                                         p.NavigationParameter == e.Parameter);
             var snm = SystemNavigationManager.GetForCurrentView();
 
             if (item == null && AppFrame.BackStackDepth > 0)
             {
                 foreach (var entry in AppFrame.BackStack.Reverse())
                 {
-                    item = allMenuItems.SingleOrDefault(p => p.DestinationPage == entry.SourcePageType.FullName);
+                    item = allMenuItems.SingleOrDefault(p => p.DestinationPage == entry.SourcePageType.FullName &&
+                                                             p.NavigationParameter == e.Parameter);
 
                     if (item != null)
                         break;
@@ -171,8 +173,8 @@ namespace TommasoScalici.AppShell
             if (item != null && item.IsSelectable)
                 SetSelectedMenuItem(item);
 
-            snm.AppViewBackButtonVisibility = AppFrame.CanGoBack ?
-                                              AppViewBackButtonVisibility.Visible : AppViewBackButtonVisibility.Collapsed;
+            snm.AppViewBackButtonVisibility = AppFrame.CanGoBack ? AppViewBackButtonVisibility.Visible :
+                                                                   AppViewBackButtonVisibility.Collapsed;
         }
 
         void SetSelectedMenuItem(MenuItem item)
