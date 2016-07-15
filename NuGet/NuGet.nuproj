@@ -31,7 +31,7 @@
     <ReleaseNotes>MenuItem.Arguments is now MenuItem.NavigationParameter (type also changed from string to object)</ReleaseNotes>
     <ProjectUrl>https://github.com/TommasoScalici/AppShell</ProjectUrl>
     <LicenseUrl>https://github.com/TommasoScalici/AppShell/blob/master/LICENSE.md</LicenseUrl>
-    <Copyright>Copyright © Tommaso Scalici 2016</Copyright>
+    <Copyright>Copyright © 2016 Tommaso Scalici</Copyright>
     <Tags>AppShell App Shell Hamburger Menu UWP UWA Navigation Template</Tags>
     <RequireLicenseAcceptance>true</RequireLicenseAcceptance>
   </PropertyGroup>
