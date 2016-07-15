@@ -124,7 +124,7 @@ namespace TommasoScalici.AppShell
                 }
 
                 if (destinationPageType != null)
-                    AppShell.Current.AppFrame.Navigate(destinationPageType, item.Arguments);
+                    AppShell.Current.AppFrame.Navigate(destinationPageType, item.NavigationParameter);
             }
         }
 

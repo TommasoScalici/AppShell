@@ -6,18 +6,23 @@ namespace TommasoScalici.AppShell
 {
     public class MenuItem : DependencyObject
     {
-        public static readonly DependencyProperty ArgumentsProperty =
-            DependencyProperty.Register("Arguments", typeof(string), typeof(MenuItem), new PropertyMetadata(string.Empty));
         public static readonly DependencyProperty DestinationPageProperty =
-            DependencyProperty.Register("DestinationPage", typeof(string), typeof(MenuItem), new PropertyMetadata(string.Empty));
+            DependencyProperty.Register("DestinationPage", typeof(string), typeof(MenuItem),
+            new PropertyMetadata(string.Empty));
         public static readonly DependencyProperty IsSelectableProperty =
             DependencyProperty.Register("IsSelectable", typeof(bool), typeof(MenuItem), new PropertyMetadata(true));
         public static readonly DependencyProperty LabelProperty =
-            DependencyProperty.Register("Label", typeof(string), typeof(MenuItem), new PropertyMetadata(string.Empty));
+            DependencyProperty.Register("Label", typeof(string), typeof(MenuItem),
+            new PropertyMetadata(string.Empty));
+        public static readonly DependencyProperty NavigationParameterProperty =
+            DependencyProperty.Register("NavigationParameter", typeof(string), typeof(MenuItem),
+            new PropertyMetadata(null));
         public static readonly DependencyProperty SymbolProperty =
-            DependencyProperty.Register("Symbol", typeof(Symbol), typeof(MenuItem), new PropertyMetadata(default(Symbol)));
+            DependencyProperty.Register("Symbol", typeof(Symbol), typeof(MenuItem),
+            new PropertyMetadata(default(Symbol)));
         public static readonly DependencyProperty SymbolAsGlyphProperty =
-            DependencyProperty.Register("SymbolAsGlyph", typeof(string), typeof(MenuItem), new PropertyMetadata(string.Empty));
+            DependencyProperty.Register("SymbolAsGlyph", typeof(string), typeof(MenuItem),
+            new PropertyMetadata(string.Empty));
         public static readonly DependencyProperty UIContentProperty =
             DependencyProperty.Register("UIContent", typeof(UIElement), typeof(MenuItem),
             new PropertyMetadata(DependencyProperty.UnsetValue));
@@ -35,11 +40,6 @@ namespace TommasoScalici.AppShell
         public event EventHandler Click;
 
 
-        public string Arguments
-        {
-            get { return (string)GetValue(ArgumentsProperty); }
-            set { SetValue(ArgumentsProperty, value); }
-        }
         public string DestinationPage
         {
             get { return (string)GetValue(DestinationPageProperty); }
@@ -54,6 +54,11 @@ namespace TommasoScalici.AppShell
         {
             get { return (string)GetValue(LabelProperty); }
             set { SetValue(LabelProperty, value); }
+        }
+        public object NavigationParameter
+        {
+            get { return (string)GetValue(NavigationParameterProperty); }
+            set { SetValue(NavigationParameterProperty, value); }
         }
         public Symbol Symbol
         {

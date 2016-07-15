@@ -10,8 +10,11 @@
       <Platform>AnyCPU</Platform>
     </ProjectConfiguration>
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\AppShell\AppShell.csproj" />
+  </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectGuid>6ec522c0-65da-4f49-bc6a-90febd1f5732</ProjectGuid>
+    <ProjectGuid>6c4dda3e-e637-42e4-bd8c-33fa100ec75e</ProjectGuid>
   </PropertyGroup>
   <PropertyGroup>
     <NuProjPath Condition=" '$(NuProjPath)' == '' ">$(MSBuildExtensionsPath)\NuProj\</NuProjPath>
@@ -19,22 +22,18 @@
   <Import Project="$(NuProjPath)\NuProj.props" Condition="Exists('$(NuProjPath)\NuProj.props')" />
   <PropertyGroup Label="Configuration">
     <Id>TommasoScalici.AppShell</Id>
-    <Version>1.0.0.5</Version>
+    <Version>1.0.0.6</Version>
     <Title>AppShell</Title>
     <Authors>Tommaso Scalici</Authors>
     <Owners>Tommaso Scalici</Owners>
-    <Summary>Menu Template for UWP apps</Summary>
-    <Description>AppShell provides a template for building UWP apps with a standard "hamburger" menu built using SplitView control. This avoid you to build or copy/paste the menu for each app while not sacrificing flexibility. AppShell was built starting from "XamlNavigagion" sample project that you can find in Windows Universal Samples</Description>
-    <ReleaseNotes>
-    </ReleaseNotes>
+    <Summary>Hamburger Menu Template for UWA</Summary>
+    <Description>AppShell provides a template to build UWA with a standard "hamburger" menu that is built upon SplitView control. This avoid you to write the same code or copy/paste the menu controls for each app while not sacrificing flexibility. AppShell was built starting from "XamlNavigation" sample project that you can find in Windows Universal Samples.</Description>
+    <ReleaseNotes>MenuItem.Arguments is now MenuItem.NavigationParameter (type also changed from string to object)</ReleaseNotes>
     <ProjectUrl>https://github.com/TommasoScalici/AppShell</ProjectUrl>
     <LicenseUrl>https://github.com/TommasoScalici/AppShell/blob/master/LICENSE.md</LicenseUrl>
-    <Copyright>Copyright © 2016 Tommaso Scalici</Copyright>
-    <Tags>AppShell.NuGet</Tags>
+    <Copyright>Copyright © Tommaso Scalici 2016</Copyright>
+    <Tags>AppShell App Shell Hamburger Menu UWP UWA Navigation Template</Tags>
     <RequireLicenseAcceptance>true</RequireLicenseAcceptance>
   </PropertyGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\AppShell\AppShell.csproj" />
-  </ItemGroup>
   <Import Project="$(NuProjPath)\NuProj.targets" />
 </Project>
