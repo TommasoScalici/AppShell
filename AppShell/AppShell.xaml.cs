@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 
 using Windows.ApplicationModel;
@@ -13,7 +14,8 @@ namespace TommasoScalici.AppShell
     public sealed partial class AppShell : UserControl
     {
         SplitViewDisplayMode previousSplitViewDisplayMode;
-        List<MenuItem> menuItems = new List<MenuItem>();
+        IEnumerable<MenuItem> menuItems = Enumerable.Empty<MenuItem>();
+        MenuItem selectedMenuItem;
         List<VisualStateGroup> visualStateGroups = new List<VisualStateGroup>();
 
 
@@ -31,6 +33,7 @@ namespace TommasoScalici.AppShell
                 {
                     togglePaneButton.Focus(FocusState.Programmatic);
                     OnPaneSizeChanged();
+                    SetSelectedMenuItem(selectedMenuItem);
                 };
 
                 SystemNavigationManager.GetForCurrentView().BackRequested += (sender, e) =>
@@ -139,8 +142,9 @@ namespace TommasoScalici.AppShell
             if (shellSplitView.DisplayMode == SplitViewDisplayMode.Overlay)
             {
                 var transform = togglePaneButton.TransformToVisual(this);
-                var rect = transform.TransformBounds(new Rect(0, 0, togglePaneButton.ActualWidth, togglePaneButton.ActualHeight));
-                PaneToggleButtonRect = rect;
+                var rect = new Rect(0, 0, togglePaneButton.ActualWidth, togglePaneButton.ActualHeight);
+                var rectTransformed = transform.TransformBounds(rect);
+                PaneToggleButtonRect = rectTransformed;
             }
             else
                 PaneToggleButtonRect = new Rect();
@@ -150,28 +154,25 @@ namespace TommasoScalici.AppShell
 
         void OnNavigatedToPage(object sender, NavigationEventArgs e)
         {
-            var allMenuItems = from menuListView in GetMenuListViews(shellSplitView.Pane)
-                               from MenuItem menuItem in menuListView.Items
-                               select menuItem;
+            UpdateMenuItems();
 
-            var item = allMenuItems.SingleOrDefault(p => p.DestinationPage == e.SourcePageType.FullName &&
-                                                         p.NavigationParameter == e.Parameter);
+            selectedMenuItem = menuItems.SingleOrDefault(p => p.DestinationPage == e.SourcePageType.FullName &&
+                                                              Equals(p.NavigationParameter, e.Parameter));
             var snm = SystemNavigationManager.GetForCurrentView();
 
-            if (item == null && AppFrame.BackStackDepth > 0)
+            if (selectedMenuItem == null && AppFrame.BackStackDepth > 0)
             {
                 foreach (var entry in AppFrame.BackStack.Reverse())
                 {
-                    item = allMenuItems.SingleOrDefault(p => p.DestinationPage == entry.SourcePageType.FullName &&
-                                                             p.NavigationParameter == e.Parameter);
+                    selectedMenuItem = menuItems.SingleOrDefault(p => p.DestinationPage == e.SourcePageType.FullName &&
+                                                                      Equals(p.NavigationParameter, e.Parameter));
 
-                    if (item != null)
+                    if (selectedMenuItem != null)
                         break;
                 }
             }
 
-            if (item != null && item.IsSelectable)
-                SetSelectedMenuItem(item);
+            SetSelectedMenuItem(selectedMenuItem);
 
             snm.AppViewBackButtonVisibility = AppFrame.CanGoBack ? AppViewBackButtonVisibility.Visible :
                                                                    AppViewBackButtonVisibility.Collapsed;
@@ -179,6 +180,9 @@ namespace TommasoScalici.AppShell
 
         void SetSelectedMenuItem(MenuItem item)
         {
+            if (item == null || !item.IsSelectable)
+                return;
+
             var menuListViews = GetMenuListViews(shellSplitView.Pane);
 
             foreach (var menuListView in menuListViews)
@@ -201,6 +205,22 @@ namespace TommasoScalici.AppShell
         {
             OnPaneSizeChanged();
             PaneStateChanged?.Invoke(Current, shellSplitView.IsPaneOpen);
+        }
+
+        void UpdateMenuItems()
+        {
+            menuItems = from menuListView in GetMenuListViews(shellSplitView.Pane)
+                        from MenuItem menuItem in menuListView.Items
+                        select menuItem;
+
+            var groupedMenuItems = from item in menuItems
+                                   where !string.IsNullOrEmpty(item.DestinationPage)
+                                   group item by new { item.DestinationPage, item.NavigationParameter } into g
+                                   select new { ConflictingItems = g };
+
+            if (groupedMenuItems.Any(g => g.ConflictingItems.Count() > 1))
+                throw new InvalidOperationException("MenuItem ambiguity detected. " +
+                "You can't have MenuItems with the same DestinationPage and NavigationParameter.");
         }
     }
 }

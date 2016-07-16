@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using System.Threading.Tasks;
 
 using Windows.ApplicationModel;
 using Windows.UI.Xaml;
@@ -130,34 +129,33 @@ namespace TommasoScalici.AppShell
 
         void MenuListviewLoaded(object sender, RoutedEventArgs e)
         {
-            Task.Run(async () =>
+            var folder = Package.Current.InstalledLocation;
+            var files = folder.GetFilesAsync().AsTask();
+
+            foreach (var file in files.Result)
             {
-                var folder = Package.Current.InstalledLocation;
+                if ((file.FileType != ".dll" && file.FileType != ".exe") ||
+                     file.DisplayName.StartsWith("CLR", StringComparison.OrdinalIgnoreCase) ||
+                     file.DisplayName.StartsWith("Microsoft", StringComparison.OrdinalIgnoreCase) ||
+                     file.DisplayName.StartsWith("System", StringComparison.OrdinalIgnoreCase) ||
+                     file.DisplayName.StartsWith("UCRT", StringComparison.OrdinalIgnoreCase))
+                    continue;
 
-                foreach (var file in await folder.GetFilesAsync())
-                {
-                    if ((file.FileType != ".dll" && file.FileType != ".exe") ||
-                         file.DisplayName.StartsWith("Clr", StringComparison.Ordinal) ||
-                         file.DisplayName.StartsWith("Microsoft", StringComparison.Ordinal) ||
-                         file.DisplayName.StartsWith("System", StringComparison.Ordinal))
-                        continue;
+                userAssemblies.Add(Assembly.Load(new AssemblyName(file.DisplayName)));
+            }
 
-                    userAssemblies.Add(Assembly.Load(new AssemblyName(file.DisplayName)));
-                }
+            var parent = VisualTreeHelper.GetParent(this);
 
-                var parent = VisualTreeHelper.GetParent(this);
+            while (parent != null && !(parent is SplitView))
+                parent = VisualTreeHelper.GetParent(parent);
 
-                while (parent != null && !(parent is SplitView))
-                    parent = VisualTreeHelper.GetParent(parent);
+            if (parent != null)
+            {
+                splitViewHost = parent as SplitView;
+                splitViewHost.RegisterPropertyChangedCallback(SplitView.IsPaneOpenProperty, (s, a) => OnPaneToggled());
 
-                if (parent != null)
-                {
-                    splitViewHost = parent as SplitView;
-                    splitViewHost.RegisterPropertyChangedCallback(SplitView.IsPaneOpenProperty, (s, a) => OnPaneToggled());
-
-                    OnPaneToggled();
-                }
-            });
+                OnPaneToggled();
+            }
         }
 
         void MenuListViewSelectionChanged(object sender, SelectionChangedEventArgs e)

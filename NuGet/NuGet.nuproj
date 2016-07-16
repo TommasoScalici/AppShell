@@ -22,13 +22,13 @@
   <Import Project="$(NuProjPath)\NuProj.props" Condition="Exists('$(NuProjPath)\NuProj.props')" />
   <PropertyGroup Label="Configuration">
     <Id>TommasoScalici.AppShell</Id>
-    <Version>1.0.0.7</Version>
+    <Version>1.0.0.9</Version>
     <Title>AppShell</Title>
     <Authors>Tommaso Scalici</Authors>
     <Owners>Tommaso Scalici</Owners>
     <Summary>Hamburger Menu Template for UWA</Summary>
     <Description>AppShell provides a template to build UWA with a standard "hamburger" menu that is built upon SplitView control. This avoid you to write the same code or copy/paste the menu controls for each app while not sacrificing flexibility. AppShell was built starting from "XamlNavigation" sample project that you can find in Windows Universal Samples.</Description>
-    <ReleaseNotes>MenuItem and Page matches are now done checking for equality for both Page name and Parameter. This allows to have more menu items with same DestinationPage but different NavigationParameter.</ReleaseNotes>
+    <ReleaseNotes>MenuItem.Arguments is now MenuItem.NavigationParameter, the type also changed from string to object to match the parameter type in the classic Page Navigation system.</ReleaseNotes>
     <ProjectUrl>https://github.com/TommasoScalici/AppShell</ProjectUrl>
     <LicenseUrl>https://github.com/TommasoScalici/AppShell/blob/master/LICENSE.md</LicenseUrl>
     <Copyright>Copyright © 2016 Tommaso Scalici</Copyright>

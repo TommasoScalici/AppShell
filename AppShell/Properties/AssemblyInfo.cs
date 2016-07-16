@@ -7,5 +7,5 @@
 [assembly: AssemblyCopyright("Copyright © 2016 Tommaso Scalici")]
 
 
-[assembly: AssemblyVersion("1.0.0.7")]
-[assembly: AssemblyFileVersion("1.0.0.7")]
+[assembly: AssemblyVersion("1.0.0.9")]
+[assembly: AssemblyFileVersion("1.0.0.9")]

@@ -20,14 +20,23 @@
                 </Grid.RowDefinitions>
 
                 <as:MenuListView Margin="0,48,0,0">
-                    <as:MenuItem Label="Home" Symbol="Home" />
-                    <as:MenuItem Label="Profile" Symbol="ContactInfo" />
-                    <as:MenuItem Label="Info" SymbolAsGlyph="&#xE946;" />
+                    <as:MenuItem DestinationPage="AppShell.TestApp.HomePage"
+                                 Label="Home"
+                                 Symbol="Home" />
+                    <as:MenuItem DestinationPage="AppShell.TestApp.HomePage"
+                                 Label="Profile"
+                                 NavigationParameter="Profile"
+                                 Symbol="ContactInfo" />
+                    <as:MenuItem DestinationPage="AppShell.TestApp.HomePage"
+                                 Label="Info"
+                                 NavigationParameter="Info"
+                                 SymbolAsGlyph="&#xE946;" />
                 </as:MenuListView>
 
                 <as:MenuListView Grid.Row="1">
                     <as:MenuItem IsSelectable="False"
                                  Label="Username"
+                                 NavigationParameter="Username"
                                  SymbolVisibility="Collapsed">
                         <as:MenuItem.UIContent>
                             <Ellipse Width="38"
@@ -39,7 +48,10 @@
                             </Ellipse>
                         </as:MenuItem.UIContent>
                     </as:MenuItem>
-                    <as:MenuItem Label="Settings" Symbol="Setting" />
+                    <as:MenuItem DestinationPage="AppShell.TestApp.HomePage"
+                                 Label="Settings"
+                                 NavigationParameter="Settings"
+                                 Symbol="Setting" />
                 </as:MenuListView>
 
             </Grid>

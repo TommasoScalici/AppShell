@@ -7,7 +7,7 @@ namespace AppShell.TestApp
         public MainPage()
         {
             InitializeComponent();
-            TommasoScalici.AppShell.AppShell.Current.AppFrame.Navigate(typeof(TestPage));
+            TommasoScalici.AppShell.AppShell.Current.AppFrame.Navigate(typeof(HomePage));
         }
     }
 }
