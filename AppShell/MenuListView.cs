@@ -43,12 +43,12 @@ namespace TommasoScalici.AppShell
 
         public void SetSelectedItem(ListViewItem item)
         {
-            int index = -1;
+            var index = -1;
 
             if (item != null)
                 index = IndexFromContainer(item);
 
-            for (int i = 0; i < Items.Count; i++)
+            for (var i = 0; i < Items.Count; i++)
             {
                 var listViewItem = (ListViewItem)ContainerFromIndex(i);
 
@@ -63,7 +63,7 @@ namespace TommasoScalici.AppShell
 
             if (!DesignMode.DesignModeEnabled)
             {
-                for (int i = 0; i < ItemContainerTransitions.Count; i++)
+                for (var i = 0; i < ItemContainerTransitions.Count; i++)
                 {
                     if (ItemContainerTransitions[i] is EntranceThemeTransition)
                         ItemContainerTransitions.RemoveAt(i);
@@ -161,9 +161,8 @@ namespace TommasoScalici.AppShell
         void MenuListViewSelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             var menuListView = sender as MenuListView;
-            var selectedMenuItem = menuListView?.SelectedItem as MenuItem;
 
-            if (selectedMenuItem != null && !selectedMenuItem.IsSelectable)
+            if (menuListView?.SelectedItem is MenuItem selectedMenuItem && !selectedMenuItem.IsSelectable)
                 menuListView.SelectedItem = e.RemovedItems.FirstOrDefault();
         }
 

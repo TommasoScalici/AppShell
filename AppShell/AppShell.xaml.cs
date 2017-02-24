@@ -13,6 +13,8 @@ namespace TommasoScalici.AppShell
 {
     public sealed partial class AppShell : UserControl
     {
+        object previousNavigationParameter;
+        Type previousSourcePageType;
         SplitViewDisplayMode previousSplitViewDisplayMode;
         IEnumerable<MenuItem> menuItems = Enumerable.Empty<MenuItem>();
         MenuItem selectedMenuItem;
@@ -27,6 +29,7 @@ namespace TommasoScalici.AppShell
             {
                 Current = this;
 
+                AppFrame.Navigating += AppFrameOnNavigating;
                 LayoutUpdated += (sender, args) => OnPaneSizeChanged();
 
                 Loaded += (sender, args) =>
@@ -54,18 +57,13 @@ namespace TommasoScalici.AppShell
 
         public static AppShell Current { get; private set; }
 
-        public Frame AppFrame { get { return frame; } }
-        public Rect PaneToggleButtonRect { get; private set; }
-        public SplitView ShellSplitView { get { return shellSplitView; } }
-
+        public Frame AppFrame => frame; public Rect PaneToggleButtonRect { get; private set; }
+        public SplitView ShellSplitView => shellSplitView;
         public static readonly DependencyProperty MenuProperty = DependencyProperty.RegisterAttached("Menu",
             typeof(UIElement), typeof(AppShell), new PropertyMetadata(DependencyProperty.UnsetValue));
 
 
-        public static UIElement GetMenu(DependencyObject obj)
-        {
-            return (UIElement)obj.GetValue(MenuProperty);
-        }
+        public static UIElement GetMenu(DependencyObject obj) => (UIElement)obj.GetValue(MenuProperty);
 
         public static void SetMenu(DependencyObject obj, UIElement value)
         {
@@ -113,6 +111,16 @@ namespace TommasoScalici.AppShell
             OnPaneSizeChanged();
         }
 
+
+        void AppFrameOnNavigating(object sender, NavigatingCancelEventArgs e)
+        {
+            if (e.Parameter == previousNavigationParameter && e.SourcePageType == previousSourcePageType)
+                e.Cancel = true;
+
+            previousNavigationParameter = e.Parameter;
+            previousSourcePageType = e.SourcePageType;
+        }
+
         IEnumerable<MenuListView> GetMenuListViews(UIElement element)
         {
             if (element is MenuListView)
@@ -120,9 +128,8 @@ namespace TommasoScalici.AppShell
 
             if (element is ContentControl)
             {
-                var content = (element as ContentControl)?.Content as UIElement;
 
-                if (content != null)
+                if ((element as ContentControl)?.Content is UIElement content)
                     foreach (var menuListView in GetMenuListViews(content))
                         yield return menuListView;
             }

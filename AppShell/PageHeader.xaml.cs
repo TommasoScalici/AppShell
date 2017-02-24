@@ -20,17 +20,13 @@ namespace TommasoScalici.AppShell
 
         public UIElement HeaderContent
         {
-            get { return (UIElement)GetValue(HeaderContentProperty); }
-            set { SetValue(HeaderContentProperty, value); }
+            get => (UIElement)GetValue(HeaderContentProperty); set => SetValue(HeaderContentProperty, value);
         }
 
         public static readonly DependencyProperty HeaderContentProperty = DependencyProperty.Register("HeaderContent",
             typeof(UIElement), typeof(PageHeader), new PropertyMetadata(DependencyProperty.UnsetValue));
 
 
-        void CurrentTogglePaneButtonSizeChanged(AppShell sender, Rect args)
-        {
-            titleBar.Margin = new Thickness(args.Right, 0, 0, 0);
-        }
+        void CurrentTogglePaneButtonSizeChanged(AppShell sender, Rect args) => titleBar.Margin = new Thickness(args.Right, 0, 0, 0);
     }
 }

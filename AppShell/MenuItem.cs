@@ -1,4 +1,5 @@
 ﻿using System;
+
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 
@@ -42,63 +43,57 @@ namespace TommasoScalici.AppShell
 
         public string DestinationPage
         {
-            get { return (string)GetValue(DestinationPageProperty); }
-            set { SetValue(DestinationPageProperty, value); }
+            get => (string)GetValue(DestinationPageProperty);
+            set => SetValue(DestinationPageProperty, value);
         }
         public bool IsSelectable
         {
-            get { return (bool)GetValue(IsSelectableProperty); }
-            set { SetValue(IsSelectableProperty, value); }
+            get => (bool)GetValue(IsSelectableProperty);
+            set => SetValue(IsSelectableProperty, value);
         }
         public string Label
         {
-            get { return (string)GetValue(LabelProperty); }
-            set { SetValue(LabelProperty, value); }
+            get => (string)GetValue(LabelProperty);
+            set => SetValue(LabelProperty, value);
         }
         public object NavigationParameter
         {
-            get { return (string)GetValue(NavigationParameterProperty); }
-            set { SetValue(NavigationParameterProperty, value); }
+            get => (string)GetValue(NavigationParameterProperty);
+            set => SetValue(NavigationParameterProperty, value);
         }
         public Symbol Symbol
         {
-            get { return (Symbol)GetValue(SymbolProperty); }
-            set { SetValue(SymbolProperty, value); }
+            get => (Symbol)GetValue(SymbolProperty);
+            set => SetValue(SymbolProperty, value);
         }
         public string SymbolAsGlyph
         {
-            get { return (string)GetValue(SymbolAsGlyphProperty); }
-            set { SetValue(SymbolAsGlyphProperty, value); }
+            get => (string)GetValue(SymbolAsGlyphProperty);
+            set => SetValue(SymbolAsGlyphProperty, value);
         }
         public UIElement UIContent
         {
-            get { return (UIElement)GetValue(UIContentProperty); }
-            set { SetValue(UIContentProperty, value); }
+            get => (UIElement)GetValue(UIContentProperty);
+            set => SetValue(UIContentProperty, value);
         }
         public Visibility LabelVisibility
         {
-            get { return (Visibility)GetValue(LabelVisibilityProperty); }
-            set { SetValue(LabelVisibilityProperty, value); }
+            get => (Visibility)GetValue(LabelVisibilityProperty);
+            set => SetValue(LabelVisibilityProperty, value);
         }
         public Visibility SymbolVisibility
         {
-            get { return (Visibility)GetValue(SymbolVisibilityProperty); }
-            set { SetValue(SymbolVisibilityProperty, value); }
+            get => (Visibility)GetValue(SymbolVisibilityProperty);
+            set => SetValue(SymbolVisibilityProperty, value);
         }
         public Visibility UIContentVisibility
         {
-            get { return (Visibility)GetValue(UIContentVisibilityProperty); }
-            set { SetValue(UIContentVisibilityProperty, value); }
+            get => (Visibility)GetValue(UIContentVisibilityProperty);
+            set => SetValue(UIContentVisibilityProperty, value);
         }
 
-        public char SymbolAsChar
-        {
-            get
-            {
-                return Symbol == default(Symbol) ? string.IsNullOrEmpty(SymbolAsGlyph) ?
-                                 default(char) : SymbolAsGlyph[0] : (char)Symbol;
-            }
-        }
+        public char SymbolAsChar => Symbol == default(Symbol) ? string.IsNullOrEmpty(SymbolAsGlyph) ?
+                                    default(char) : SymbolAsGlyph[0] : (char)Symbol;
 
 
         public void RaiseClick() => OnClick();

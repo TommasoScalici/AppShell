@@ -5,10 +5,7 @@ namespace AppShell.TestApp
 {
     public sealed partial class HomePage : Page
     {
-        public HomePage()
-        {
-            InitializeComponent();
-        }
+        public HomePage() => InitializeComponent();
 
 
         protected override void OnNavigatedTo(NavigationEventArgs e)

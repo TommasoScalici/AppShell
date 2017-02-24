@@ -10,7 +10,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
 [assembly: AssemblyProduct("AppShell.TestApp")]
-[assembly: AssemblyCopyright("Copyright ©  2016")]
+[assembly: AssemblyCopyright("Copyright © 2017 Tommaso Scalici")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
